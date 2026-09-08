@@ -1,4 +1,3 @@
-# CivicConnect-Municipal-Complaint-Portal
 # CivicConnect – Municipal Complaint Portal
 
 ## Project Description
