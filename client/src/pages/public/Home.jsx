@@ -11,6 +11,7 @@ import NoticeTicker from '../../components/NoticeTicker.jsx';
 import { CardsSkeleton, SkeletonLine } from '../../components/LoadingSkeleton.jsx';
 import { useUi } from '../../context/UiContext.jsx';
 import { SITE, HELPLINES, DISCLAIMER } from '../../config/site.js';
+import { SITE_IMAGES, categoryImage } from '../../config/images.js';
 
 const STEPS = [
   { icon: FileText, title: '1. Report', text: 'Describe the issue, add a photo and confirm the location.' },
@@ -30,6 +31,13 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative overflow-hidden bg-navy-950 text-white">
+        <img
+          src={SITE_IMAGES.hero}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/90 to-navy-950/50" />
         <div className="absolute inset-0 opacity-20 [background:radial-gradient(circle_at_20%_20%,#2557eb_0%,transparent_45%),radial-gradient(circle_at_80%_0%,#ff9933_0%,transparent_40%)]" />
         <div className="container-page relative grid gap-12 py-16 lg:grid-cols-2 lg:py-24">
           <div className="animate-fade-in">
@@ -130,25 +138,43 @@ export default function Home() {
             <CardsSkeleton count={6} />
           ) : categories.data?.length ? (
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {categories.data.slice(0, 6).map((cat) => (
-                <Link
-                  key={cat._id}
-                  to="/register"
-                  className="card group flex flex-col p-5 transition-all hover:-translate-y-1 hover:shadow-card-hover"
-                >
-                  <span
-                    className="flex h-11 w-11 items-center justify-center rounded-xl"
-                    style={{ backgroundColor: `${cat.colorHex}1a`, color: cat.colorHex }}
+              {categories.data.slice(0, 6).map((cat) => {
+                const img = categoryImage(cat.icon);
+                return (
+                  <Link
+                    key={cat._id}
+                    to="/register"
+                    className="card group flex flex-col overflow-hidden transition-all hover:-translate-y-1 hover:shadow-card-hover"
                   >
-                    <CategoryIcon name={cat.icon} className="h-6 w-6" />
-                  </span>
-                  <h3 className="mt-4 text-base font-semibold text-navy-900">{cat.name}</h3>
-                  <p className="mt-1 flex-1 text-sm text-navy-500">{cat.description}</p>
-                  <span className="mt-3 text-xs font-medium text-navy-400">
-                    {cat.complaintCount || 0} report{cat.complaintCount === 1 ? '' : 's'} logged
-                  </span>
-                </Link>
-              ))}
+                    <div
+                      className="relative h-40 w-full overflow-hidden"
+                      style={{ background: `linear-gradient(135deg, ${cat.colorHex}33, ${cat.colorHex}11)` }}
+                    >
+                      {img ? (
+                        <img
+                          src={img}
+                          alt={cat.name}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                        />
+                      ) : null}
+                      <span
+                        className="absolute bottom-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl bg-white/95 shadow-card"
+                        style={{ color: cat.colorHex }}
+                      >
+                        <CategoryIcon name={cat.icon} className="h-5 w-5" />
+                      </span>
+                    </div>
+                    <div className="flex flex-1 flex-col p-5">
+                      <h3 className="text-base font-semibold text-navy-900">{cat.name}</h3>
+                      <p className="mt-1 flex-1 text-sm text-navy-500">{cat.description}</p>
+                      <span className="mt-3 text-xs font-medium text-navy-400">
+                        {cat.complaintCount || 0} report{cat.complaintCount === 1 ? '' : 's'} logged
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           ) : (
             <p className="text-sm text-navy-500">Categories will appear here once configured.</p>

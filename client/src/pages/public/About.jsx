@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Target, Users, Eye, Server, ShieldCheck, Smartphone } from 'lucide-react';
+import { Target, Users, Eye, Server, ShieldCheck, Smartphone, Images } from 'lucide-react';
+import { SITE_IMAGES, IMAGE_CREDITS } from '../../config/images.js';
 
 const VALUES = [
   { icon: Eye, title: 'Transparency', text: 'Public tracking timelines show progress at every stage.' },
@@ -21,6 +22,14 @@ export default function About() {
           upload evidence and follow their resolution. It gives municipal staff and administrators
           the dashboards they need to route work and stay accountable.
         </p>
+      </div>
+
+      <div className="mt-12 overflow-hidden rounded-2xl border border-navy-100 shadow-card">
+        <img
+          src={SITE_IMAGES.about}
+          alt="A municipal corporation building"
+          className="h-64 w-full object-cover sm:h-80"
+        />
       </div>
 
       <div className="mt-16 grid gap-8 lg:grid-cols-2">
@@ -63,6 +72,24 @@ export default function About() {
         <Link to="/register" className="btn-primary mt-6 bg-civic-600 hover:bg-civic-500">
           Create an account
         </Link>
+      </div>
+
+      <div className="mt-12 rounded-xl border border-navy-100 bg-white p-5 text-xs text-navy-500">
+        <p className="flex items-center gap-2 font-semibold text-navy-700">
+          <Images className="h-4 w-4" /> Image credits
+        </p>
+        <p className="mt-1">
+          Photographs are used from Wikimedia Commons under their respective free licences.
+        </p>
+        <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+          {IMAGE_CREDITS.map((c) => (
+            <li key={c.file}>
+              <a href={c.url} target="_blank" rel="noreferrer" className="link">
+                {c.label}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

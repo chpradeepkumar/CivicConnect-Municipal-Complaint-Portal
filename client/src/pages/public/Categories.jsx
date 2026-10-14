@@ -5,6 +5,7 @@ import categoryService from '../../services/categoryService.js';
 import CategoryIcon from '../../components/CategoryIcon.jsx';
 import { CardsSkeleton } from '../../components/LoadingSkeleton.jsx';
 import { ErrorState } from '../../components/EmptyState.jsx';
+import { categoryImage } from '../../config/images.js';
 
 export default function Categories() {
   const { data, loading, error, reload } = useAsync(() => categoryService.list(), []);
@@ -26,26 +27,39 @@ export default function Categories() {
           <ErrorState message="Could not load categories" onRetry={reload} />
         ) : data?.length ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {data.map((cat) => (
-              <div key={cat._id} className="card flex flex-col p-6">
-                <span
-                  className="flex h-12 w-12 items-center justify-center rounded-xl"
-                  style={{ backgroundColor: `${cat.colorHex}1a`, color: cat.colorHex }}
-                >
-                  <CategoryIcon name={cat.icon} className="h-6 w-6" />
-                </span>
-                <h3 className="mt-4 text-lg font-semibold text-navy-900">{cat.name}</h3>
-                <p className="mt-1 flex-1 text-sm text-navy-500">{cat.description}</p>
-                <div className="mt-4 flex items-center justify-between border-t border-navy-100 pt-4">
-                  <span className="text-xs font-medium text-navy-400">
-                    {cat.complaintCount || 0} report{cat.complaintCount === 1 ? '' : 's'}
-                  </span>
-                  <Link to="/register" className="link flex items-center gap-1 text-sm">
-                    Report <ArrowRight className="h-4 w-4" />
-                  </Link>
+            {data.map((cat) => {
+              const img = categoryImage(cat.icon);
+              return (
+                <div key={cat._id} className="card flex flex-col overflow-hidden">
+                  <div
+                    className="relative h-40 w-full overflow-hidden"
+                    style={{ background: `linear-gradient(135deg, ${cat.colorHex}33, ${cat.colorHex}11)` }}
+                  >
+                    {img ? (
+                      <img src={img} alt={cat.name} loading="lazy" className="h-full w-full object-cover" />
+                    ) : null}
+                    <span
+                      className="absolute bottom-3 left-3 flex h-11 w-11 items-center justify-center rounded-xl bg-white/95 shadow-card"
+                      style={{ color: cat.colorHex }}
+                    >
+                      <CategoryIcon name={cat.icon} className="h-6 w-6" />
+                    </span>
+                  </div>
+                  <div className="flex flex-1 flex-col p-6">
+                    <h3 className="text-lg font-semibold text-navy-900">{cat.name}</h3>
+                    <p className="mt-1 flex-1 text-sm text-navy-500">{cat.description}</p>
+                    <div className="mt-4 flex items-center justify-between border-t border-navy-100 pt-4">
+                      <span className="text-xs font-medium text-navy-400">
+                        {cat.complaintCount || 0} report{cat.complaintCount === 1 ? '' : 's'}
+                      </span>
+                      <Link to="/register" className="link flex items-center gap-1 text-sm">
+                        Report <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <p className="text-center text-navy-500">No categories configured yet.</p>

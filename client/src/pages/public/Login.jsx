@@ -4,6 +4,7 @@ import { ShieldCheck, LogIn } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
 import { Field, Input } from '../../components/FormControls.jsx';
+import { SITE_IMAGES } from '../../config/images.js';
 import { loginSchema, zodErrors } from '../../schemas/authSchemas.js';
 import { getErrorMessage } from '../../services/api.js';
 import { dashboardHome } from '../../utils/roles.js';
@@ -94,7 +95,15 @@ export default function Login() {
         </div>
       </div>
 
-      <div className="hidden rounded-2xl bg-navy-900 p-10 text-white lg:block">
+      <div className="relative hidden overflow-hidden rounded-2xl bg-navy-900 p-10 text-white lg:block">
+        <img
+          src={SITE_IMAGES.login}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-900/80 to-navy-900/40" />
+        <div className="relative">
         <h2 className="text-2xl font-bold">Report. Track. Resolve.</h2>
         <p className="mt-3 max-w-sm text-navy-200">
           CivicConnect connects citizens with the departments that keep the city running.
@@ -108,6 +117,7 @@ export default function Login() {
             </li>
           ))}
         </ul>
+        </div>
       </div>
     </div>
   );
